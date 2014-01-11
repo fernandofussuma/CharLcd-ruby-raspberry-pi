@@ -157,8 +157,6 @@ class CharLcd
     end
   end
   
-  private
-  
   def write_4_bits(bits, char_mode = false)
     delay_microseconds(1000)
 

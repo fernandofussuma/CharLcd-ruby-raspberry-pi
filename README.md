@@ -11,7 +11,7 @@ https://github.com/jwhitehorn/pi_piper
 
 example:
 ```
-sudo ruby ./CharLcd_matrix_example.rb
+sudo ruby CharLcd_matrix_example.rb
 ```
 
 usage:
