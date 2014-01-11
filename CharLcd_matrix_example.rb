@@ -15,7 +15,7 @@ def rand_matrix(prng)
   prng.rand(2).zero? ? prng.rand(33..127) : prng.rand(161..253)
 end
 
-while true
+(0..1000).each do
   c = prng.rand(COLUMNS)
   for l in 0...LINES
     
@@ -47,3 +47,6 @@ while true
       
   end
 end
+
+lcd.no_blink
+lcd.clear
