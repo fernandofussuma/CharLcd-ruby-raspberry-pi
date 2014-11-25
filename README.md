@@ -6,8 +6,15 @@ Lcd display library compatible with the hd44780 controller on the raspberrypi.
 wiring instructions:
 http://learn.adafruit.com/drive-a-16x2-lcd-directly-with-a-raspberry-pi/overview
 
+install:
+```
+sudo gem install charlcd
+```
+
 usage:
 ``` ruby
+require 'charlcd'
+
 char_lcd = CharLcd.new
 char_lcd.begin(16, 2)
 char_lcd.message("First Line\nSecond Line")
