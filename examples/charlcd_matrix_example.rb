@@ -1,4 +1,4 @@
-require_relative 'CharLcd'
+require 'charLcd'
 
 SLEEP_TIME = 0.005
 COLUMNS = 16
@@ -18,7 +18,7 @@ end
 (0..100).each do
   c = prng.rand(COLUMNS)
   for l in 0...LINES
-    
+
       count = prng.rand(5)
       i = 0
       while i < count
@@ -28,14 +28,14 @@ end
         sleep(SLEEP_TIME)
         i += 1
       end
-      
+
       if prng.rand(10).zero?
         count = prng.rand(5)
         i = 0
-        
+
         c1 = prng.rand(COLUMNS)
         l1 = prng.rand(LINES)
-        
+
         while i < count do
           lcd.set_cursor(c1, l1)
           lcd.write_4_bits(rand_matrix(prng), true)
@@ -44,7 +44,7 @@ end
           i += 1
         end
       end
-      
+
   end
 end
 

@@ -1,5 +1,8 @@
 require 'pi_piper'
 
+# code based on:
+# https://github.com/adafruit/Adafruit-Raspberry-Pi-Python-Code/blob/master/Adafruit_CharLCD/Adafruit_CharLCD.py
+
 class CharLcd
   # commands
   LCD_CLEARDISPLAY = 0x01
@@ -38,67 +41,67 @@ class CharLcd
   LCD_1LINE = 0x00
   LCD_5x10DOTS = 0x04
   LCD_5x8DOTS = 0x00
-  
+
   def initialize(pin_rs = 25, pin_e = 24, pins_db = [23, 17, 27, 22])
     @pin_rs = PiPiper::Pin.new(:pin => pin_rs, :direction => :out)
     @pin_e = PiPiper::Pin.new(:pin => pin_e, :direction => :out)
     @pins_db = []
-    
+
     pins_db.each { |pin_db| @pins_db.push(PiPiper::Pin.new(:pin => pin_db, :direction => :out)) }
-    
+
     write_4_bits(0x33) # initialization
     write_4_bits(0x32) # initialization
     write_4_bits(0x28) # 2 line 5x7 matrix
     write_4_bits(0x0C) # turn cursor off 0x0E to enable cursor
     write_4_bits(0x06) # shift cursor right
-    
+
     @display_control = LCD_DISPLAYON | LCD_CURSOROFF | LCD_BLINKOFF
 
-    @display_function = LCD_4BITMODE | LCD_1LINE | LCD_5x8DOTS 
+    @display_function = LCD_4BITMODE | LCD_1LINE | LCD_5x8DOTS
     @display_function |= LCD_2LINE
 
     # Initialize to default text direction (for romance languages)
     @display_mode = LCD_ENTRYLEFT | LCD_ENTRYSHIFTDECREMENT
     write_4_bits(LCD_ENTRYMODESET | @display_mode) # set the entry mode
-    
+
     clear
   end
-  
+
   def begin(cols, lines)
     if lines > 1
       @number_lines = lines
       @display_function |= LCD_2LINE
     end
   end
-  
+
   def home
     write_4_bits(LCD_RETURNHOME)
     delay_microseconds(3000)
   end
-  
+
   def clear
     write_4_bits(LCD_CLEARDISPLAY) # command to clear display
     delay_microseconds(3000)	# 3000 microsecond sleep, clearing the display takes a long time
   end
-  
+
   def set_cursor(col, row)
     row_offsets = [0x00, 0x40, 0x14, 0x54]
-    
+
     row = @number_lines - 1 if (row > @number_lines)
-    
+
     write_4_bits(LCD_SETDDRAMADDR | col + row_offsets[row])
   end
-  
+
   def no_display
     @display_control &= ~LCD_DISPLAYON
     write_4_bits(LCD_DISPLAYCONTROL | @display_control)
   end
-  
+
   def display
     @display_control |= LCD_DISPLAYON
   	write_4_bits(LCD_DISPLAYCONTROL | @display_control)
   end
-  
+
   def no_cursor
     @display_control &= ~LCD_CURSORON
     write_4_bits(LCD_DISPLAYCONTROL | @display_control)
@@ -146,7 +149,7 @@ class CharLcd
     @display_mode &= ~LCD_ENTRYSHIFTINCREMENT
     write_4_bits(LCD_ENTRYMODESET | @display_mode)
   end
-  
+
   def message(text)
     text.each_char do |char|
       if char.eql?("\n")
@@ -156,7 +159,7 @@ class CharLcd
       end
     end
   end
-  
+
   def write_4_bits(bits, char_mode = false)
     delay_microseconds(1000)
 
@@ -174,7 +177,7 @@ class CharLcd
 
     pulse_enable
   end
-  
+
   def pulse_enable
     @pin_e.off
     delay_microseconds(1)
@@ -182,10 +185,10 @@ class CharLcd
     delay_microseconds(1)
     @pin_e.off
   end
-  
+
   def delay_microseconds(microseconds)
     seconds = microseconds/1_000_000.0
     sleep(seconds)
   end
-  
+
 end
