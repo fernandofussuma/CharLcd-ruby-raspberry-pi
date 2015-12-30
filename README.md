@@ -18,6 +18,7 @@ require 'charlcd'
 char_lcd = CharLcd.new
 char_lcd.begin(16, 2)
 char_lcd.message("First Line\nSecond Line")
+char_lcd.clean_pins()
 ```
 
 License

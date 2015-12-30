@@ -203,7 +203,7 @@ class CharLcd
     sleep(seconds)
   end
 
-  def clean_pins()
+  def clean_pins
     RPi::GPIO.clean_up
   end
 end
