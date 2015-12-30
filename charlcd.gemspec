@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'charlcd'
-  s.version     = '0.0.1'
+  s.version     = '0.0.2'
   s.date        = '2014-11-25'
   s.summary     = "Lcd display raspberrypi library!"
   s.description = "A lcd display library compatible with the hd44780 controller on the raspberrypi"

@@ -1,4 +1,4 @@
-require 'pi_piper'
+require 'rpi_gpio'
 
 # code based on:
 # https://github.com/adafruit/Adafruit-Raspberry-Pi-Python-Code/blob/master/Adafruit_CharLCD/Adafruit_CharLCD.py
@@ -43,11 +43,19 @@ class CharLcd
   LCD_5x8DOTS = 0x00
 
   def initialize(pin_rs = 25, pin_e = 24, pins_db = [23, 17, 27, 22])
-    @pin_rs = PiPiper::Pin.new(:pin => pin_rs, :direction => :out)
-    @pin_e = PiPiper::Pin.new(:pin => pin_e, :direction => :out)
+    RPi::GPIO.set_numbering :bcm
+
+    RPi::GPIO.setup pin_rs, :as => :output
+    RPi::GPIO.setup pin_e, :as => :output
+
+    @pin_rs = pin_rs
+    @pin_e = pin_e
     @pins_db = []
 
-    pins_db.each { |pin_db| @pins_db.push(PiPiper::Pin.new(:pin => pin_db, :direction => :out)) }
+    pins_db.each { |pin_db| 
+      @pins_db.push(pin_db) 
+      RPi::GPIO.setup pin_db, :as => :output
+    }
 
     write_4_bits(0x33) # initialization
     write_4_bits(0x32) # initialization
@@ -165,25 +173,29 @@ class CharLcd
 
     bits = bits.to_s(2).rjust(8, "0")
 
-    @pin_rs.update_value(char_mode)
+    if char_mode
+      RPi::GPIO.set_high @pin_rs
+    else
+      RPi::GPIO.set_low @pin_rs
+    end
 
-    @pins_db.each { |pin_db| pin_db.off }
-    (0..3).each { |i| @pins_db.reverse[i].on if bits[i].eql?("1") }
+    @pins_db.each { |pin_db| RPi::GPIO.set_low pin_db }
+    (0..3).each { |i| RPi::GPIO.set_high @pins_db.reverse[i] if bits[i].eql?("1") }
 
     pulse_enable
 
-    @pins_db.each { |pin_db| pin_db.off }
-    (4..7).each { |i| @pins_db.reverse[i - 4].on if bits[i].eql?("1") }
+    @pins_db.each { |pin_db| RPi::GPIO.set_low pin_db }
+    (4..7).each { |i| RPi::GPIO.set_high @pins_db.reverse[i - 4] if bits[i].eql?("1") }
 
     pulse_enable
   end
 
   def pulse_enable
-    @pin_e.off
+    RPi::GPIO.set_low @pin_e
     delay_microseconds(1)
-    @pin_e.on
+    RPi::GPIO.set_high @pin_e
     delay_microseconds(1)
-    @pin_e.off
+    RPi::GPIO.set_low @pin_e
   end
 
   def delay_microseconds(microseconds)
@@ -191,4 +203,7 @@ class CharLcd
     sleep(seconds)
   end
 
+  def clean_pins
+    RPi::GPIO.clean_up
+  end
 end

@@ -1,4 +1,4 @@
-require 'charLcd'
+require 'rpi_gpio'
 
 SLEEP_TIME = 0.005
 COLUMNS = 16
