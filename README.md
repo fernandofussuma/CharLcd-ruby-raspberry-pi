@@ -22,6 +22,8 @@ char_lcd.message("First Line\nSecond Line")
 char_lcd.clean_pins()
 ```
 
+Thanks to JV LOBO to changing the library from pi_piper to rpi_gpio.
+
 License
 =======
 (The MIT License)
