@@ -50,3 +50,5 @@ end
 
 lcd.no_blink
 lcd.clear
+
+lcd.clean_pins
