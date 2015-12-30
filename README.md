@@ -8,6 +8,7 @@ http://learn.adafruit.com/drive-a-16x2-lcd-directly-with-a-raspberry-pi/overview
 
 install:
 ```
+sudo gem install rpi_gpio
 sudo gem install charlcd
 ```
 
