@@ -166,7 +166,6 @@ class CharLcd
         write_4_bits(char.ord, true)
       end
     end
-    RPi::GPIO.clean_up
   end
 
   def write_4_bits(bits, char_mode = false)
